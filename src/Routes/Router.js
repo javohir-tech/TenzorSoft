@@ -1,9 +1,11 @@
 //Vue Router
-import { createMemoryHistory, createRouter } from "vue-router";
+import { createWebHistory, createRouter } from "vue-router";
 //Main Layout
 import MainLayout from "../Layout/MainLayout.vue";
 //Views
 import { Home, Products } from "../Views";
+//Auth
+import { Login, Register } from "../Auth";
 
 const routes = [
     {
@@ -19,11 +21,19 @@ const routes = [
                 component: Products
             }
         ]
+    },
+    {
+        path: '/register',
+        component: Register
+    },
+    {
+        path: '/login',
+        component: Login
     }
 ]
 
 const router = createRouter({
-    history: createMemoryHistory(),
+    history: createWebHistory(),
     routes
 })
 
