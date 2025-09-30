@@ -28,12 +28,17 @@ export function useAuth() {
     const login = async (credentials) => {
         loading.value = false;
         try {
-            const res = await axios.post(`${import.meta.env.ViTE_API_URL}/auth/login`, credentials);
-            console.log(res);
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, credentials);
+            // console.log(res);
+            userName.value = res.data.data.userName
+            token.value = res.data.data.token;
+            localStorage.setItem('token', token.value)
             console.log(res.data.message);
         } catch (error) {
             console.log(error.message)
-        }   
+        }finally{
+            loading.value = false
+        }
     }
 
     return {
