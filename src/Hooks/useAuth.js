@@ -9,8 +9,8 @@ const token = ref(null);
 const loading = ref(false);
 
 export function useAuth() {
-
     const register = async (data) => {
+        loading.value = true
         try {
             const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, data);
             userName.value = res.data.data.username;
@@ -18,7 +18,10 @@ export function useAuth() {
             console.log(res.data.message);
             localStorage.setItem('token', token.value)
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
+        }
+        finally {
+            loading.value = false
         }
     }
 

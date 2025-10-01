@@ -11,8 +11,12 @@ const username = ref('');
 const password = ref('');
 const email = ref('');
 
+console.log(loading.value)
+
 const handleRegister = async () => {
+    console.log(loading.value)
     try {
+        console.log(loading.value)
         await register({
             username: username.value,
             password: password.value,
@@ -22,6 +26,7 @@ const handleRegister = async () => {
         console.log("Xatolik :", err)
     }
 }
+
 </script>
 
 <template>
@@ -34,7 +39,7 @@ const handleRegister = async () => {
                     <input v-model="username" id="username" class="form-control" type="text" placeholder="Your Name">
                     <input v-model="password" class="form-control" type="password" placeholder="Password">
                     <input v-model="email" class="form-control" type="email" placeholder="Email">
-                    <button class="btn btn-primary" type="submit">Sign Up</button>
+                    <button class="btn btn-primary" type="submit">{{ loading ? "Loading..." : "Sign Up"}}</button>
                 </form>
                 <!-- Forget Password -->
                 <div class="text-end mt-3">
