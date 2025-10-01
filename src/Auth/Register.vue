@@ -35,8 +35,20 @@ const handleRegister = async () => {
                 <h3 class="mb-3">Sign Up</h3>
                 <!-- Form Section -->
                 <form @submit.prevent="handleRegister" class="d-flex flex-column w-100 gap-3">
+
+                    <!-- ============== USERNAME =============== -->
                     <FormControl placeholder="Your Name" type="text" id="username" v-model="username"
-                        :-validator="(val) => val.length >= 3" invalid="Maydonni to'ldiring " />
+                        :-validator="(val) => val.length >= 3" invalid="Fill in the blank." />
+                    <!-- ============= PASSWORD ================ -->
+                    <FormControl placeholder="Password" type="password" id="password" v-model="password"
+                        :-validator="(val) => val.length >= 6" invalid="password must be at least 6 characters long" />
+                    <!-- ================ CONFIRM PASSWORD ==================== -->
+                    <FormControl placeholder="Confirm Password" type="password" id="confirm-password"
+                        v-model="confirmPassword" :-validator="(val) => val === password"
+                        invalid="enter the password correctly" />
+                    <!-- ================= EMAIL ADDRESS ======================= -->
+                    <FormControl placeholder="Email Addres" type="email" id="emial" v-model="email"
+                        :-validator="(val) => val.includes('@gmail.com')" invalid="enter the email correctly"/>
 
                     <button class="btn btn-primary" type="submit" :disabled="loading">{{ loading ? "Loading..." :
                         "SignUp" }}</button>
