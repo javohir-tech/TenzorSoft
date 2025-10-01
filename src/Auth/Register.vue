@@ -5,7 +5,7 @@ import { ref } from 'vue';
 import { useAuth } from '../Hooks/useAuth';
 
 //useAuth
-const { loading, token, register } = useAuth();
+const { loading , register } = useAuth();
 
 const username = ref('');
 const password = ref('');
