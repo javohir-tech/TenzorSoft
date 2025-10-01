@@ -1,15 +1,19 @@
 <script setup>
 //VUe
-import { ref } from 'vue';
+import { ref, Text } from 'vue';
 //Hooks
 import { useAuth } from '../Hooks/useAuth';
+//Components
+import FormControl from '../components/Inputs/FormControl.vue';
 
 //useAuth
 const { loading, register } = useAuth();
 
 const username = ref('');
 const password = ref('');
+const confirmPassword = ref('')
 const email = ref('');
+//Validation
 
 const handleRegister = async () => {
     try {
@@ -22,7 +26,6 @@ const handleRegister = async () => {
         console.log("Xatolik :", err)
     }
 }
-
 </script>
 
 <template>
@@ -32,10 +35,60 @@ const handleRegister = async () => {
                 <h3 class="mb-3">Sign Up</h3>
                 <!-- Form Section -->
                 <form @submit.prevent="handleRegister" class="d-flex flex-column w-100 gap-3">
-                    <input v-model="username" id="username" class="form-control" type="text" placeholder="Your Name">
-                    <input v-model="password" class="form-control" type="password" placeholder="Password">
-                    <input v-model="email" class="form-control" type="email" placeholder="Email">
-                    <button class="btn btn-primary" type="submit">{{ loading ? "Loading..." : "Sign Up"}}</button>
+                   
+                    <!-- <div>
+                        <input v-model="username" id="username" class="form-control" type="text" placeholder="Your Name"
+                            required :class="{
+                                'is-valid': userNameTouch && username.length >= 3,
+                                'is-invalid': userNameTouch && username.length < 3
+                            }" @blur="userNameTouch = true">
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Maydonni to'ldirish shart
+                        </div>
+                    </div> -->
+                    <!-- <div>
+                        <input v-model="password" class="form-control" type="password" placeholder="Password" required
+                            :class="{
+                                'is-valid': passwordTouch && password.length >= 3,
+                                'is-invalid': passwordTouch && password.length < 3
+                            }" @blur="passwordTouch = true">
+                        <div class="valid-feedback">
+                            Look good !
+                        </div>
+                        <div class="invalid-feedback">
+                            Maydonni to'ldirish shart
+                        </div>
+                    </div> -->
+                    <!-- <div>
+                        <input v-model="confirmPassword" type="password" class="form-control"
+                            placeholder="Confirm Password" required :class="{
+                                'is-valid': confirmPassword && password === confirmPassword,
+                                'is-invalid': confirmPasswordTouch && password !== confirmPassword
+                            }" @blur="confirmPasswordTouch = true">
+                        <div class="valid-feedback">
+                            Looks Good !
+                        </div>
+                        <div class="invalid-feedback">
+                            Parolni to'g'ri kiriting
+                        </div>
+                    </div> -->
+                    <!-- <div>
+                        <input v-model="email" class="form-control" type="email" placeholder="Email" required :class="{
+                            'is-valid': emailTouch && email.includes('@gmail.com') && email.length >= 3,
+                            'is-invalid': emailTouch && !email.includes('@hmail.com') && email.length < 3
+                        }" @blur="emailTouch = true">
+                        <div class="valid-feedback">
+                            Looks good !
+                        </div>
+                        <div class="invalid-feedback">
+                            Emailingizni to'g'ri kiritig
+                        </div>
+                    </div> -->
+                    <button class="btn btn-primary" type="submit" :disabled="loading">{{ loading ? "Loading..." :
+                        "SignUp" }}</button>
                 </form>
                 <!-- Forget Password -->
                 <div class="text-end mt-3">
@@ -56,7 +109,8 @@ const handleRegister = async () => {
 
                 <!-- Sign In -->
                 <div class="mt-3">
-                    <p class="d-inline text-secondary">Don't have an account ?</p> <router-link to="/login" style="font-weight: 600; text-decoration: none;">Sign In</router-link>
+                    <p class="d-inline text-secondary">Don't have an account ?</p> <router-link to="/login"
+                        style="font-weight: 600; text-decoration: none;">Sign In</router-link>
                 </div>
             </div>
         </div>
