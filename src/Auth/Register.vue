@@ -51,7 +51,7 @@ const handleRegister = async () => {
                         :validator="(val) => val.includes('@gmail.com')" invalid="enter the email correctly"/>
 
                     <button class="btn btn-primary" type="submit" :disabled="loading">{{ loading ? "Loading..." :
-                        "SignUp" }}</button>
+                        "Sign Up" }}</button>
                         
                 </form>
                 <!-- Forget Password -->
