@@ -26,7 +26,6 @@ const handleRegister = async () => {
 </script>
 
 <template>
-    <a-button type="primary"> tysalom</a-button>
     <div class="row auth">
         <div class="col-5 d-flex h-100 flex-column align-items-center justify-content-center">
             <div class="w-75">
@@ -69,7 +68,7 @@ const handleRegister = async () => {
 
 <style scoped>
 /* @import url(); */
-/* .auth {
+.auth {
     height: 100%;
 }
 
@@ -87,5 +86,5 @@ const handleRegister = async () => {
     display: inline;
     width: 200px;
     border: 1px solid #E4E6EC;
-} */
+}
 </style>
