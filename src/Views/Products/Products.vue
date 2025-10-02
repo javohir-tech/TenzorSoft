@@ -7,14 +7,18 @@ import { Product } from '../../components';
 import { onMounted, ref } from 'vue';
 
 const content = ref([])
+const loading = ref(false)
 
 const getProducts = async () => {
+    loading.value = true
     try {
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
         console.log(res)
         content.value = res.data.data.content
     } catch (error) {
         console.log(error.message)
+    } finally {
+        loading.value = false
     }
 }
 
@@ -25,8 +29,23 @@ onMounted(() => {
 
 <template>
     <div class="container h-100">
-        <div class="loading d-flex justify-content-center align-items-center" v-if="content.length === 0">
-            loading...
+        <div class="loading d-flex justify-content-center align-items-center" v-if="loading && content.length === 0">
+            <div class="spinner-grow text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-secondary mx-2" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-secondary me-2" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div class="error d-flex justify-content-center align-items-center alert alert-danger"
+            v-else-if="!loading && content.length === 0">
+            Malumotlarni olishni iloji bo'lmadi
         </div>
         <div class="row my-3" v-else>
             <Product v-for="product in content" :key="product.id" :name="product.name" :price="product.price"
@@ -36,7 +55,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.loading {
+.loading,
+.error {
     height: 100vh;
 }
 </style>
