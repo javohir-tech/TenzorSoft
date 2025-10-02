@@ -9,7 +9,8 @@ const props = defineProps({
 
 <template>
     <div class="col-12 col-sm-6 col-md-4 col-lg-3 gx-2 gy-3 rounded">
-        <div class="product">
+        <div class="product position-relative z-1">
+            <a @click.prevent="()=>console.log(1)" class="position-absolute top-0 start-0 bg-primary w-100 h-100 rounded z-2"></a>
             <div class="product-img d-flex justify-content-center align-items-center bg-secondary rounded-top">
                 <i class="bi bi-card-image text-light"></i>
             </div>
@@ -19,12 +20,24 @@ const props = defineProps({
                     <p>{{ props.price }} $</p>
                 </div>
                 <p>{{ props.stock }} ta qolgan </p>
+                <div class="text-end">
+                    <button class="btn btn-warning me-2 position-relative z-3"><i class="bi bi-pencil-square"></i></button>
+                    <button class="btn btn-danger position-relative z-3"><i class="bi bi-trash"></i></button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
+.product{
+    a{
+        opacity: 0;
+    }
+    a:hover{
+        cursor: pointer;
+    }
+}
 .product-img {
     height: 100px;
 
