@@ -7,3 +7,8 @@ html,body{
 #app{
     height: 100%;
 }
+
+.loading,
+.error {
+    height: 100vh;
+}

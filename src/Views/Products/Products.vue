@@ -47,7 +47,7 @@ onMounted(() => {
         <!-- ERROR -->
         <div class="error d-flex justify-content-center align-items-center alert alert-danger"
             v-else-if="!loading && content.length === 0">
-            Malumotlarni olishni iloji bo'lmadi
+            Malumotlarni olishni iloji bo'lmadi !!!
         </div>
         <!-- CONTENT -->
         <div class="row my-3" v-else>
@@ -59,8 +59,4 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.loading,
-.error {
-    height: 100vh;
-}
 </style>
