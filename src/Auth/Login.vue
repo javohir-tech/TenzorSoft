@@ -6,10 +6,14 @@ import { useAuth } from '../Hooks/useAuth';
 import FormControl from '../components/Inputs/FormControl.vue';
 //useAuth
 const { loading, login } = useAuth();
+//Vue router
+import { useRouter } from 'vue-router';
 
 
 const username = ref('');
 const password = ref('');
+
+const router = useRouter()
 
 const handleLogin = async () => {
     try {

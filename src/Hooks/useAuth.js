@@ -4,11 +4,17 @@ import axios from 'axios';
 //Vue
 import { ref } from 'vue';
 
+//Vue Roueter
+import { useRouter } from 'vue-router';
+
 const userName = ref(null);
 const token = ref(null);
 const loading = ref(false);
 
 export function useAuth() {
+    
+    const router = useRouter();
+
     const register = async (data) => {
         loading.value = true
         try {
@@ -17,6 +23,7 @@ export function useAuth() {
             token.value = res.data.data.token;
             console.log(res.data.message);
             localStorage.setItem('token', token.value)
+            router.push('/')
         } catch (error) {
             console.log(error.message)
         }
@@ -34,6 +41,7 @@ export function useAuth() {
             token.value = res.data.data.token;
             localStorage.setItem('token', token.value)
             console.log(res.data.message);
+            router.push('/');
         } catch (error) {
             console.log(error.message)
         } finally {
