@@ -37,4 +37,22 @@ const router = createRouter({
     routes
 })
 
+router.beforeEach((to, form, next) => {
+
+    const maqullangan = ['/login', '/register'];
+
+    const token = localStorage.getItem('token');
+
+    if (token && (to.path === '/login' || to.path === '/register')) {
+        next("/")
+    }
+
+    if(!token  && !maqullangan.includes(to.path)){
+        next('/login')
+    }
+
+    next()
+
+})
+
 export { router }
