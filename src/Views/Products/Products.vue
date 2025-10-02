@@ -24,9 +24,19 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="container">
-        <div class="row my-3">
-            <Product v-for="product in content" :key="product.id" :name="product.name" :price="product.price" :stock="product.stock" />
+    <div class="container h-100">
+        <div class="loading d-flex justify-content-center align-items-center" v-if="content.length === 0">
+            loading...
+        </div>
+        <div class="row my-3" v-else>
+            <Product v-for="product in content" :key="product.id" :name="product.name" :price="product.price"
+                :stock="product.stock" />
         </div>
     </div>
 </template>
+
+<style scoped>
+.loading {
+    height: 100vh;
+}
+</style>
