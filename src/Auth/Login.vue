@@ -3,7 +3,8 @@
 import { ref } from 'vue';
 // Hooks
 import { useAuth } from '../Hooks/useAuth';
-import FormControl from '../components/Inputs/FormControl.vue';
+//Components
+import { FormControl } from '../components';
 //useAuth
 const { loading, login } = useAuth();
 

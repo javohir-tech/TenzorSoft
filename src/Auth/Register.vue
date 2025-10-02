@@ -4,7 +4,7 @@ import { ref } from 'vue';
 //Hooks
 import { useAuth } from '../Hooks/useAuth';
 //Components
-import FormControl from '../components/Inputs/FormControl.vue';
+import { FormControl } from '../components';
 
 //useAuth
 const { loading, register } = useAuth();
