@@ -59,8 +59,8 @@ const handleLogin = async () => {
 
                 <!-- Sign In -->
                 <div class="mt-3">
-                    <p class="d-inline text-secondary">Don't have an account ?</p> <router-link to="/login"
-                        style="font-weight: 600; text-decoration: none;">Sign In</router-link>
+                    <p class="d-inline text-secondary">Don't have an account ?</p> <router-link to="/register"
+                        style="font-weight: 600; text-decoration: none;">Sign Up</router-link>
                 </div>
             </div>
         </div>
