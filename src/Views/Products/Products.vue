@@ -25,8 +25,8 @@ onMounted(() => {
 
 <template>
     <div class="container">
-        <div class="row mt-3">
-            <Product v-for="product in content" :name="product.name" :price="product.price" :stock="product.stock" />
+        <div class="row my-3">
+            <Product v-for="product in content" :key="product.id" :name="product.name" :price="product.price" :stock="product.stock" />
         </div>
     </div>
 </template>

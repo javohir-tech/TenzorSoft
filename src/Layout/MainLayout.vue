@@ -1,6 +1,6 @@
 <script setup>
 //Components
-import { Navbar } from '../components';
+import { Footer, Navbar } from '../components';
 
 </script>
 
@@ -9,4 +9,5 @@ import { Navbar } from '../components';
     <main>
         <router-view />
     </main>
+    <Footer/>
 </template>

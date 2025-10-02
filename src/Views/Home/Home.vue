@@ -3,11 +3,9 @@
 </script>
 
 <template>
-    <div>
-        sa
-    </div>
+   <div>
+    Home
+   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,26 +1,57 @@
 <script setup>
+//Props
 const props = defineProps({
     name: String,
-    price :Number,
-    stock : Number
+    price: Number,
+    stock: Number
 })
 </script>
 
 <template>
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <div>
-            <div class="product-img">
-                <img src="" alt="">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 gx-2 gy-3 rounded">
+        <div class="product">
+            <div class="product-img d-flex justify-content-center align-items-center bg-secondary rounded-top">
+                <i class="bi bi-card-image text-light"></i>
             </div>
-            <div class="product-info">
-                <div>
+            <div class="product-info px-3 py-2 rounded-bottom">
+                <div class="d-flex justify-content-between">
                     <p>{{ props.name }}</p>
-                    <p>{{ props.price }}</p>
+                    <p>{{ props.price }} $</p>
                 </div>
-                <p>{{ props.stock }}</p>
+                <p>{{ props.stock }} ta qolgan </p>
             </div>
         </div>
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.product-img {
+    height: 100px;
+
+    i {
+        font-size: 32px;
+        transition: all 0.8ms  ease-in;
+    }
+}
+
+.product-info {
+    background-color: #F2F2F2;
+    transition: all 0.3s ease-in;
+    p{
+        font-size: 15px;
+        font-weight: 500;
+        color: #234C6A;
+    }
+}
+
+.product:hover {
+    .product-info {
+        background-color: #DCDCDC;
+    }
+    .product-img{
+        i{
+            font-size: 34px;
+        }
+    }
+}
+</style>
