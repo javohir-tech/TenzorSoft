@@ -1,6 +1,6 @@
 <script setup>
+//Components
 import { Navbar } from '../components';
-
 
 </script>
 
