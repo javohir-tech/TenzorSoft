@@ -13,7 +13,7 @@ const getProducts = async () => {
     loading.value = true
     try {
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
-        console.log(res)
+        // console.log(res)
         content.value = res.data.data.content
     } catch (error) {
         console.log(error.message)
@@ -29,6 +29,7 @@ onMounted(() => {
 
 <template>
     <div class="container h-100">
+        <!-- LOADING -->
         <div class="loading d-flex justify-content-center align-items-center" v-if="loading && content.length === 0">
             <div class="spinner-grow text-secondary" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -43,14 +44,17 @@ onMounted(() => {
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
+        <!-- ERROR -->
         <div class="error d-flex justify-content-center align-items-center alert alert-danger"
             v-else-if="!loading && content.length === 0">
             Malumotlarni olishni iloji bo'lmadi
         </div>
+        <!-- CONTENT -->
         <div class="row my-3" v-else>
-            <Product v-for="product in content" :key="product.id" :name="product.name" :price="product.price"
+            <Product v-for="product in content" :key="product.id" :id="product.id" :name="product.name" :price="product.price"
                 :stock="product.stock" />
         </div>
+
     </div>
 </template>
 
