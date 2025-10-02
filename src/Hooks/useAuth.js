@@ -19,15 +19,15 @@ export function useAuth() {
     const router = useRouter();
 
     const register = async (data) => {
-        loading.value = true
+        loading.value = true;
+
         try {
             const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, data);
             userName.value = res.data.data.username;
             token.value = res.data.data.token;
-            // console.log(res.data.message);
             toast.success(res.data.message)
             localStorage.setItem('token', token.value)
-            router.push('/')
+            setTimeout(() => router.push('/'), 1500)
         } catch (error) {
             console.log(error.message)
         }
@@ -41,11 +41,11 @@ export function useAuth() {
         try {
             const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, credentials);
             // console.log(res);
+            toast.success(res.data.message)
             userName.value = res.data.data.userName;
             token.value = res.data.data.token;
             localStorage.setItem('token', token.value);
-            toast.success(res.data.message, {autoClose: 4000})
-            router.push('/');
+            setTimeout(() => router.push('/'), 1500)
         } catch (error) {
             toast.error(error.message)
             // console.log(error.message)

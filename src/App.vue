@@ -1,11 +1,13 @@
 <script setup>
-//Toast
+// Toast container import
 import { ToastifyContainer } from 'vue3-toastify';
 </script>
 
 <template>
-  <router-view />
+  <router-view /> 
   <ToastifyContainer />
 </template>
 
-<style scoped></style>
+<style>
+
+</style>
