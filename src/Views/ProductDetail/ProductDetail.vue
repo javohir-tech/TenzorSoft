@@ -18,6 +18,13 @@ const data = ref(null);
 const loading = ref(false);
 const date = ref(null);
 
+//PUT actions
+const productName = ref('');
+const productPrice = ref(0);
+const productStock = ref(0);
+const productCategory = ref('');
+const productActive = ref(false)
+
 const { deleteProduct } = useApiActionsProducts()
 
 const getProductDetails = async () => {
@@ -35,9 +42,25 @@ const getProductDetails = async () => {
     }
 }
 
-const deleteProducts = async()=>{
+const deleteProducts = async () => {
     try {
-       await deleteProduct(route.params.id)
+        await deleteProduct(route.params.id)
+        setTimeout(() => router.push('/products'), 2000)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const putProduct = async () => {
+    try {
+        const res = await axios.put(`${import.meta.env.VITE_API_URL}/products/${route.params.id}`, {
+            name: productName.value,
+            price: productPrice.value,
+            stock: productStock.value,
+            category: productCategory.value,
+            isActive: productActive.value
+        })
+        console.log(res)
     } catch (error) {
         console.log(error)
     }
@@ -46,10 +69,13 @@ const deleteProducts = async()=>{
 onMounted(() => {
     getProductDetails();
 })
+
+
 </script>
 
 <template>
     <div class="container h-100">
+
         <!-- LOADING -->
         <div class="loading d-flex justify-content-center align-items-center" v-if="loading && data === null">
             <div class="spinner-grow text-secondary" role="status">
@@ -91,8 +117,33 @@ onMounted(() => {
                         <p class="mb-0"><i class="bi bi-heart"></i></p>
                     </div>
                     <div class="d-flex flex-column flex-md-row gap-2 mt-2">
-                        <button class="btn btn-warning flex-fill">Put</button>
-                        <button @click="deleteProducts" class="btn btn-danger flex-fill">Delete</button>
+                        <button data-bs-toggle="modal" data-bs-target="#putAction"
+                            class="btn btn-warning flex-fill">Put</button>
+                        <button class="btn btn-danger flex-fill">Delete</button>
+                        <!--============MODAL=============-->
+                        <div class="modal fade" id="putAction" tabindex="-1" aria-labelledby="putAction"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Tahrirlash</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--============/MODAL=============-->
                     </div>
                 </div>
             </div>

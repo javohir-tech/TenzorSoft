@@ -4,10 +4,11 @@ import axios from 'axios';
 //Components
 import { Product } from '../../components';
 //VUE
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
-const content = ref([])
-const loading = ref(false)
+const content = ref([]);
+const loading = ref(false);
+const deleteAction = ref(false)
 
 const getProducts = async () => {
     loading.value = true
@@ -25,6 +26,13 @@ const getProducts = async () => {
 onMounted(() => {
     getProducts()
 })
+
+watch(deleteAction, () => {
+    getProducts();
+    deleteAction.value= false
+})
+
+
 </script>
 
 <template>
@@ -51,12 +59,11 @@ onMounted(() => {
         </div>
         <!-- CONTENT -->
         <div class="row my-3" v-else>
-            <Product v-for="product in content" :key="product.id" :id="product.id" :name="product.name" :price="product.price"
-                :stock="product.stock" />
+            <Product v-for="product in content" :key="product.id" :id="product.id" :name="product.name"
+                :price="product.price" :stock="product.stock" @delete="(val) => deleteAction = val" />
         </div>
 
     </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
