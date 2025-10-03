@@ -20,7 +20,10 @@ const props = defineProps({
                     <p>{{ props.name }}</p>
                     <p>{{ props.price }} $</p>
                 </div>
-                <p>{{ props.stock }} ta qolgan </p>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <p class="mb-0">{{ props.stock }} ta qolgan </p>
+                    <span><i class="bi bi-heart"></i></span>
+                </div>
                 <div class="text-end">
                     <button @click="()=>console.log('tahrirlash')" class="btn btn-warning me-2 position-relative z-3"><i class="bi bi-pencil-square"></i></button>
                     <button @click="()=>console.log('ochirish')" class="btn btn-danger position-relative z-3"><i class="bi bi-trash"></i></button>
