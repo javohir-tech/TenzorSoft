@@ -130,13 +130,20 @@ function modalClose() {
         </div>
         <!-- CONTENT -->
         <div v-else>
-            <div class="justify-content-end d-flex mt-3">
+            <div class="justify-content-end d-flex my-3">
                 <form class="d-flex" @submit.prevent="getSearchProducts(search)" role="search">
                     <input v-model="search" class="form-control me-2" type="search" placeholder="Search"
                         aria-label="Search" />
                 </form>
                 <button @click="modalOpen" class="btn btn-primary">Add Product</button>
             </div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <RouterLink to="products">Products</RouterLink>
+                    </li>
+                </ol>
+            </nav>
             <div class="row my-3">
                 <Product v-for="product in content" :key="product.id" :is-active="product.isActive"
                     :category="product.category" :id="product.id" :name="product.name" :price="product.price"

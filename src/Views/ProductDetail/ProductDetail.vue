@@ -21,7 +21,7 @@ const router = useRouter();
 const data = ref(null);
 const loading = ref(false);
 const date = ref(null);
-let modalinstance =null;
+let modalinstance = null;
 
 //PUT actions
 const productName = ref('');
@@ -127,87 +127,101 @@ function modalClose() {
             v-else-if="!loading && data === null">
             Malumotlarni olishni iloji bo'lmadi !!!
         </div>
-        <div class="row g-2 mt-3" v-else>
-            <div class="col-12 col-md-6">
-                <div class="product-image bg-secondary rounded d-flex justify-content-center align-items-center">
-                    <i class="bi bi-card-image text-light"></i>
+        <div v-else>
+            <div class="row g-2 mt-3">
+                <div class="my-3">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <RouterLink to="/products">Products</RouterLink>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <RouterLink>{{ data.name }}</RouterLink>
+                            </li>
+                        </ol>
+                    </nav>
                 </div>
-            </div>
-            <div class="col-12 col-md-5 product-info">
-                <div class="">
-                    <div class="d-flex justify-content-between">
-                        <p>{{ data.name }}</p>
-                        <p>{{ data.price }} $</p>
+                <div class="col-12 col-md-6">
+                    <div class="product-image bg-secondary rounded d-flex justify-content-center align-items-center">
+                        <i class="bi bi-card-image text-light"></i>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <p>{{ data.stock }} ta qolgan </p>
-                        <p>Category : {{ data.category }}</p>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0">{{ date === null ? '' : date }} da yartilgan</p>
-                        <p class="mb-0"><i class="bi bi-heart"></i></p>
-                    </div>
-                    <div class="d-flex flex-column flex-md-row gap-2 mt-2">
-                        <button @click="modalOpen" class="btn btn-warning flex-fill">Put</button>
-                        <button  @click="deleteProducts" class="btn btn-danger flex-fill">Delete</button>
-                        <!--============MODAL=============-->
-                        <div class="modal fade" id="putAction" tabindex="-1" aria-labelledby="putAction"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Tahrirlash</h1>
-                                        <button type="button" class="btn-close" @click="modalClose"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form @submit.prevent="editProduct">
-                                            <div class="mb-3">
-                                                <label for="name" class="form-label">Nomi</label>
-                                                <FormControl v-model="productName" :placeholder="'name'" :type="'text'"
-                                                    :id="'name'" :model-value="productName"
-                                                    :validator="(val) => val.length >= 3" />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="price" class="form-label">Narxi</label>
-                                                <FormControl v-model="productPrice" :placeholder="'price'"
-                                                    :type="'number'" :id="'price'" :model-value="productPrice"
-                                                    :validator="(val) => val >= 0" :invalid="'Eng kami 0 '" />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="stock" class="form-label">Soni</label>
-                                                <FormControl v-model="productStock" :placeholder="'stock'"
-                                                    :type="'number'" :id="'stock'" :model-value="productStock"
-                                                    :validator="(val) => val >= 0" :invalid="'enng  kami  0'" />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="category" class="form-label">Kategorysi</label>
-                                                <FormControl v-model="productCategory" :placeholder="'kategoty'"
-                                                    :id="'category'" :model-value="productCategory"
-                                                    :validator="(val) => val.length >= 3" />
-                                            </div>
-                                            <div class="mb-3">
-                                                <div class="form-check form-switch">
-                                                    <input v-model="productActive" class="form-check-input"
-                                                        type="checkbox" role="switch" id="switchCheckDefault">
-                                                    <label class="form-check-label"
-                                                        for="switchCheckDefault">Active</label>
+                </div>
+                <div class="col-12 col-md-5 product-info">
+                    <div class="">
+                        <div class="d-flex justify-content-between">
+                            <p>{{ data.name }}</p>
+                            <p>{{ data.price }} $</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p>{{ data.stock }} ta qolgan </p>
+                            <p>Category : {{ data.category }}</p>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="mb-0">{{ date === null ? '' : date }} da yartilgan</p>
+                            <p class="mb-0"><i class="bi bi-heart"></i></p>
+                        </div>
+                        <div class="d-flex flex-column flex-md-row gap-2 mt-2">
+                            <button @click="modalOpen" class="btn btn-warning flex-fill">Put</button>
+                            <button @click="deleteProducts" class="btn btn-danger flex-fill">Delete</button>
+                            <!--============MODAL=============-->
+                            <div class="modal fade" id="putAction" tabindex="-1" aria-labelledby="putAction"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Tahrirlash</h1>
+                                            <button type="button" class="btn-close" @click="modalClose"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form @submit.prevent="editProduct">
+                                                <div class="mb-3">
+                                                    <label for="name" class="form-label">Nomi</label>
+                                                    <FormControl v-model="productName" :placeholder="'name'"
+                                                        :type="'text'" :id="'name'" :model-value="productName"
+                                                        :validator="(val) => val.length >= 3" />
                                                 </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button @click="modalClose" type="button" class="btn btn-secondary">
-                                            Close
-                                        </button>
-                                        <button type="button" class="btn btn-warning" @click="editProduct"
-                                            :disabled="loadingActions">
-                                            {{ loadingActions ? 'loading...' : 'edit' }}
-                                        </button>
+                                                <div class="mb-3">
+                                                    <label for="price" class="form-label">Narxi</label>
+                                                    <FormControl v-model="productPrice" :placeholder="'price'"
+                                                        :type="'number'" :id="'price'" :model-value="productPrice"
+                                                        :validator="(val) => val >= 0" :invalid="'Eng kami 0 '" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="stock" class="form-label">Soni</label>
+                                                    <FormControl v-model="productStock" :placeholder="'stock'"
+                                                        :type="'number'" :id="'stock'" :model-value="productStock"
+                                                        :validator="(val) => val >= 0" :invalid="'enng  kami  0'" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="category" class="form-label">Kategorysi</label>
+                                                    <FormControl v-model="productCategory" :placeholder="'kategoty'"
+                                                        :id="'category'" :model-value="productCategory"
+                                                        :validator="(val) => val.length >= 3" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <div class="form-check form-switch">
+                                                        <input v-model="productActive" class="form-check-input"
+                                                            type="checkbox" role="switch" id="switchCheckDefault">
+                                                        <label class="form-check-label"
+                                                            for="switchCheckDefault">Active</label>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button @click="modalClose" type="button" class="btn btn-secondary">
+                                                Close
+                                            </button>
+                                            <button type="button" class="btn btn-warning" @click="editProduct"
+                                                :disabled="loadingActions">
+                                                {{ loadingActions ? 'loading...' : 'edit' }}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <!--============/MODAL=============-->
                         </div>
-                        <!--============/MODAL=============-->
                     </div>
                 </div>
             </div>
