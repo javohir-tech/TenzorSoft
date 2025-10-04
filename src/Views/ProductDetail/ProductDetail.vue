@@ -12,7 +12,8 @@ import dayjs from 'dayjs';
 import useApiActionsProducts from '../../Hooks/useApiActionsProducts';
 //Components
 import FormControl from '../../components/Inputs/FormControl.vue'
-
+//Bootstrap
+import Modal from 'bootstrap/js/dist/modal';
 
 const route = useRoute();
 const router = useRouter();
@@ -20,6 +21,7 @@ const router = useRouter();
 const data = ref(null);
 const loading = ref(false);
 const date = ref(null);
+let modalinstance =null;
 
 //PUT actions
 const productName = ref('');
@@ -68,6 +70,7 @@ const editProduct = async () => {
             category: productCategory.value,
             isActive: productActive.value,
         })
+        modalClose()
         await getProductDetails()
     } catch (error) {
         console.log(error)
@@ -76,7 +79,28 @@ const editProduct = async () => {
 
 onMounted(async () => {
     await getProductDetails();
+    await nextTick();
+
+    const modalEl = document.getElementById('putAction');
+
+    if (modalEl) {
+        modalinstance = new Modal(modalEl);
+
+        modalEl.addEventListener('hide.bs.modal', () => {
+            document.activeElement?.blur();
+        });
+    } else {
+        console.warn("Modal element topilmadi!");
+    }
 })
+
+function modalOpen() {
+    modalinstance.show()
+}
+
+function modalClose() {
+    modalinstance.hide()
+}
 
 </script>
 
@@ -124,7 +148,7 @@ onMounted(async () => {
                         <p class="mb-0"><i class="bi bi-heart"></i></p>
                     </div>
                     <div class="d-flex flex-column flex-md-row gap-2 mt-2">
-                        <button  data-bs-toggle="modal" data-bs-target="#putAction" class="btn btn-warning flex-fill">Put</button>
+                        <button @click="modalOpen" class="btn btn-warning flex-fill">Put</button>
                         <button class="btn btn-danger flex-fill">Delete</button>
                         <!--============MODAL=============-->
                         <div class="modal fade" id="putAction" tabindex="-1" aria-labelledby="putAction"
@@ -133,7 +157,7 @@ onMounted(async () => {
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="exampleModalLabel">Tahrirlash</h1>
-                                        <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" @click="modalClose"></button>
                                     </div>
                                     <div class="modal-body">
                                         <form @submit.prevent="editProduct">
@@ -172,7 +196,7 @@ onMounted(async () => {
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <button data-bs-dismiss="modal" type="button" class="btn btn-secondary">
+                                        <button @click="modalClose" type="button" class="btn btn-secondary">
                                             Close
                                         </button>
                                         <button type="button" class="btn btn-warning" @click="editProduct"

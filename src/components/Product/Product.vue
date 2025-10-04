@@ -1,10 +1,12 @@
 <script setup>
 //VUE
-import { ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 //HOOKS
 import useApiActionsProducts from '../../Hooks/useApiActionsProducts';
 //Componenets
 import { FormControl } from '..';
+//Bootstrap
+import Modal from 'bootstrap/js/dist/modal';
 
 const { deleteProduct, putProduct, loading } = useApiActionsProducts()
 //Props
@@ -14,8 +16,11 @@ const props = defineProps({
     price: Number,
     stock: Number,
     category: String,
-    isActive : Boolean
+    isActive: Boolean
 })
+
+//DOM
+let modalinstance = null;
 
 //PUT actions
 const productName = ref(props.name)
@@ -24,16 +29,16 @@ const productStock = ref(props.stock);
 const productCategory = ref(props.category);
 const productActive = ref(props.isActive)
 
-const emit = defineEmits(['delete' , 'edit'])
+const emit = defineEmits(['delete', 'edit'])
 
-const deleteProducts = async (id) => {
-    try {
-        await deleteProduct(id)
-        emit('delete')
-    } catch (error) {
-        console.log(error)
-    }
-}
+// const deleteProducts = async (id) => {
+//     try {
+//         await deleteProduct(id)
+//         emit('delete')
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
 
 const editProduct = async (id) => {
     try {
@@ -44,11 +49,34 @@ const editProduct = async (id) => {
             category: productCategory.value,
             isActive: productActive.value,
         })
+        modalClose()
         emit('edit')
     } catch (error) {
         console.log(error)
     }
 }
+onMounted(async () => {
+    await nextTick();
+
+    const modalEl = document.getElementById('putAction');
+
+    if (modalEl) {
+        modalinstance = new Modal(modalEl);
+
+        modalEl.addEventListener('hide.bs.modal', () => {
+            document.activeElement?.blur();
+        })
+    }
+})
+
+function modalClose() {
+    modalinstance.hide()
+}
+
+function modalOpen(){
+    modalinstance.show()
+}
+
 </script>
 
 
@@ -70,7 +98,7 @@ const editProduct = async (id) => {
                     <span><i class="bi bi-heart"></i></span>
                 </div>
                 <div class="text-end">
-                    <button data-bs-toggle="modal" data-bs-target="#putAction"
+                    <button @click="modalOpen"
                         class="btn btn-warning me-2 position-relative z-3"><i class="bi bi-pencil-square"></i></button>
                     <button @click="deleteProducts(props.id)" class="btn btn-danger position-relative z-3"><i
                             class="bi bi-trash"></i></button>
@@ -83,7 +111,7 @@ const editProduct = async (id) => {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Tahrirlash</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" @click="modalClose"></button>
                     </div>
                     <div class="modal-body">
                         <form @submit.prevent="editProduct">
@@ -119,10 +147,11 @@ const editProduct = async (id) => {
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button data-bs-dismiss="modal" type="button" class="btn btn-secondary">
+                        <button @click="modalClose" type="button" class="btn btn-secondary">
                             Close
                         </button>
-                        <button type="button" class="btn btn-warning" @click="editProduct(props.id)" :disabled="loading">
+                        <button type="button" class="btn btn-warning" @click="editProduct(props.id)"
+                            :disabled="loading">
                             {{ loading ? 'loading...' : 'edit' }}
                         </button>
                     </div>

@@ -4,7 +4,7 @@ import axios from 'axios';
 //Components
 import { Product } from '../../components';
 //VUE
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const content = ref([]);
 const loading = ref(false);
@@ -22,7 +22,7 @@ const getProducts = async () => {
     }
 }
 
-onMounted(() => {
+onMounted(()=>{
     getProducts()
 })
 
@@ -51,10 +51,17 @@ onMounted(() => {
             Malumotlarni olishni iloji bo'lmadi !!!
         </div>
         <!-- CONTENT -->
-        <div class="row my-3" v-else>
-            <Product v-for="product in content" :key="product.id" :is-active="product.isActive" :category="product.category" :id="product.id" :name="product.name"
-                :price="product.price" :stock="product.stock" @delete="getProducts" @edit="getProducts" />
+        <div v-else>
+            <div>
+
+            </div>
+            <div class="row my-3">
+                <Product v-for="product in content" :key="product.id" :is-active="product.isActive"
+                    :category="product.category" :id="product.id" :name="product.name" :price="product.price"
+                    :stock="product.stock" @delete="getProducts" @edit="getProducts" />
+            </div>
         </div>
+
 
     </div>
 </template>
