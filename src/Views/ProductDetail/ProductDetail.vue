@@ -12,8 +12,6 @@ import dayjs from 'dayjs';
 import useApiActionsProducts from '../../Hooks/useApiActionsProducts';
 //Components
 import FormControl from '../../components/Inputs/FormControl.vue'
-//Bootstrap
-import * as bootstrap from 'bootstrap'
 
 
 const route = useRoute();
@@ -22,7 +20,6 @@ const router = useRouter();
 const data = ref(null);
 const loading = ref(false);
 const date = ref(null);
-let modalInstance = null;
 
 //PUT actions
 const productName = ref('');
@@ -71,7 +68,6 @@ const editProduct = async () => {
             category: productCategory.value,
             isActive: productActive.value,
         })
-        modalClose()
         await getProductDetails()
     } catch (error) {
         console.log(error)
@@ -80,32 +76,7 @@ const editProduct = async () => {
 
 onMounted(async () => {
     await getProductDetails();
-    await nextTick()
-    const modalEl = document.getElementById('putAction');
-    if (modalEl) {
-        modalInstance = new bootstrap.Modal(modalEl)
-        modalEl.addEventListener('hidden.bs.modal', () => {
-            const backdrop = document.querySelector('.modal-backdrop');
-            if (backdrop) backdrop.remove();
-        });
-    } else {
-        console.log("modal element topilmadi ")
-    }
 })
-
-
-function modalOpen() {
-    modalInstance.show();
-}
-
-function modalClose() {
-    if (modalInstance) {
-        document.activeElement?.blur()
-        modalInstance.hide()
-    } else {
-        console.log('modal hali mavjud emas ')
-    }
-}
 
 </script>
 
@@ -153,7 +124,7 @@ function modalClose() {
                         <p class="mb-0"><i class="bi bi-heart"></i></p>
                     </div>
                     <div class="d-flex flex-column flex-md-row gap-2 mt-2">
-                        <button @click="modalOpen" class="btn btn-warning flex-fill">Put</button>
+                        <button  data-bs-toggle="modal" data-bs-target="#putAction" class="btn btn-warning flex-fill">Put</button>
                         <button class="btn btn-danger flex-fill">Delete</button>
                         <!--============MODAL=============-->
                         <div class="modal fade" id="putAction" tabindex="-1" aria-labelledby="putAction"
@@ -162,8 +133,7 @@ function modalClose() {
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="exampleModalLabel">Tahrirlash</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
+                                        <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <form @submit.prevent="editProduct">
@@ -202,8 +172,9 @@ function modalClose() {
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
+                                        <button data-bs-dismiss="modal" type="button" class="btn btn-secondary">
+                                            Close
+                                        </button>
                                         <button type="button" class="btn btn-warning" @click="editProduct"
                                             :disabled="loadingActions">
                                             {{ loadingActions ? 'loading...' : 'edit' }}
