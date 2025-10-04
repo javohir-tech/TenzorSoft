@@ -8,7 +8,6 @@ import { onMounted, ref, watch } from 'vue';
 
 const content = ref([]);
 const loading = ref(false);
-const deleteAction = ref(false)
 
 const getProducts = async () => {
     loading.value = true
@@ -26,12 +25,6 @@ const getProducts = async () => {
 onMounted(() => {
     getProducts()
 })
-
-// watch(deleteAction, () => {
-//     getProducts();
-//     deleteAction.value= false
-// })
-
 
 </script>
 
@@ -59,8 +52,8 @@ onMounted(() => {
         </div>
         <!-- CONTENT -->
         <div class="row my-3" v-else>
-            <Product v-for="product in content" :key="product.id" :id="product.id" :name="product.name"
-                :price="product.price" :stock="product.stock" @delete="(val) => deleteAction = val" />
+            <Product v-for="product in content" :key="product.id" :is-active="product.isActive" :category="product.category" :id="product.id" :name="product.name"
+                :price="product.price" :stock="product.stock" @delete="getProducts" @edit="getProducts" />
         </div>
 
     </div>

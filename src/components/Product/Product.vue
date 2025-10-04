@@ -1,27 +1,54 @@
 <script setup>
+//VUE
+import { ref } from 'vue';
 //HOOKS
 import useApiActionsProducts from '../../Hooks/useApiActionsProducts';
+//Componenets
+import { FormControl } from '..';
 
-const { deleteProduct } = useApiActionsProducts()
+const { deleteProduct, putProduct, loading } = useApiActionsProducts()
 //Props
 const props = defineProps({
     id: Number,
     name: String,
     price: Number,
-    stock: Number
+    stock: Number,
+    category: String,
+    isActive : Boolean
 })
 
-const emit = defineEmits(['delete'])
+//PUT actions
+const productName = ref(props.name)
+const productPrice = ref(props.price);
+const productStock = ref(props.stock);
+const productCategory = ref(props.category);
+const productActive = ref(props.isActive)
+
+const emit = defineEmits(['delete' , 'edit'])
+
 const deleteProducts = async (id) => {
     try {
         await deleteProduct(id)
-        emit('delete' , true)
+        emit('delete')
     } catch (error) {
         console.log(error)
     }
 }
 
-
+const editProduct = async (id) => {
+    try {
+        await putProduct(id, {
+            name: productName.value,
+            price: productPrice.value,
+            stock: productStock.value,
+            category: productCategory.value,
+            isActive: productActive.value,
+        })
+        emit('edit')
+    } catch (error) {
+        console.log(error)
+    }
+}
 </script>
 
 
@@ -43,13 +70,66 @@ const deleteProducts = async (id) => {
                     <span><i class="bi bi-heart"></i></span>
                 </div>
                 <div class="text-end">
-                    <button @click="() => console.log('tahrirlash')"
+                    <button data-bs-toggle="modal" data-bs-target="#putAction"
                         class="btn btn-warning me-2 position-relative z-3"><i class="bi bi-pencil-square"></i></button>
                     <button @click="deleteProducts(props.id)" class="btn btn-danger position-relative z-3"><i
                             class="bi bi-trash"></i></button>
                 </div>
             </div>
         </div>
+        <!--============MODAL=============-->
+        <div class="modal fade" id="putAction" tabindex="-1" aria-labelledby="putAction" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Tahrirlash</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form @submit.prevent="editProduct">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nomi</label>
+                                <FormControl v-model="productName" :placeholder="'name'" :type="'text'" :id="'name'"
+                                    :model-value="productName" :validator="(val) => val.length >= 3" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Narxi</label>
+                                <FormControl v-model="productPrice" :placeholder="'price'" :type="'number'"
+                                    :id="'price'" :model-value="productPrice" :validator="(val) => val >= 0"
+                                    :invalid="'Eng kami 0 '" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="stock" class="form-label">Soni</label>
+                                <FormControl v-model="productStock" :placeholder="'stock'" :type="'number'"
+                                    :id="'stock'" :model-value="productStock" :validator="(val) => val >= 0"
+                                    :invalid="'enng  kami  0'" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Kategorysi</label>
+                                <FormControl v-model="productCategory" :placeholder="'kategoty'" :id="'category'"
+                                    :model-value="productCategory" :validator="(val) => val.length >= 3" />
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input v-model="productActive" class="form-check-input" type="checkbox"
+                                        role="switch" id="switchCheckDefault">
+                                    <label class="form-check-label" for="switchCheckDefault">Active</label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-bs-dismiss="modal" type="button" class="btn btn-secondary">
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-warning" @click="editProduct(props.id)" :disabled="loading">
+                            {{ loading ? 'loading...' : 'edit' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--============/MODAL=============-->
     </div>
 </template>
 
