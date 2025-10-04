@@ -149,7 +149,7 @@ function modalClose() {
                     </div>
                     <div class="d-flex flex-column flex-md-row gap-2 mt-2">
                         <button @click="modalOpen" class="btn btn-warning flex-fill">Put</button>
-                        <button class="btn btn-danger flex-fill">Delete</button>
+                        <button  @click="deleteProducts" class="btn btn-danger flex-fill">Delete</button>
                         <!--============MODAL=============-->
                         <div class="modal fade" id="putAction" tabindex="-1" aria-labelledby="putAction"
                             aria-hidden="true">

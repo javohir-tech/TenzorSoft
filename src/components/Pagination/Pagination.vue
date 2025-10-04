@@ -8,7 +8,7 @@ const props = defineProps({
 
 const page = ref(0)
 
-const emit = defineEmits(['page', 'next', 'Previous']);
+const emit = defineEmits(['page']);
 
 const handlePage = (n) => {
     page.value = n - 1;

@@ -4,7 +4,7 @@ import axios from 'axios';
 //Components
 import { FormControl, Pagination, Product } from '../../components';
 //VUE
-import { nextTick, onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 //HOOKS
 import useApiActionsProducts from '../../Hooks/useApiActionsProducts'
 //Bootstrap
@@ -25,6 +25,8 @@ let modalInstance = null;
 //Pagination
 const totalElements = ref(0);
 const totalPages = ref(0);
+//Search
+const search = ref('')
 
 const page = 0;
 
@@ -40,6 +42,16 @@ const getProducts = async (page = 0) => {
         console.log(error.message)
     } finally {
         loading.value = false
+    }
+}
+
+const getSearchProducts = async (searchItem) => {
+    loading.value = true;
+    try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/product/search?query=${searchItem}`)
+        console.log(res);
+    } catch (error) {
+        console.log(error)
     }
 }
 
@@ -88,6 +100,10 @@ function modalClose() {
     modalInstance.hide()
 }
 
+// watch(search, () => {
+//     getSearchProducts(search)
+// })
+
 </script>
 
 <template>
@@ -115,8 +131,9 @@ function modalClose() {
         <!-- CONTENT -->
         <div v-else>
             <div class="justify-content-end d-flex mt-3">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                <form class="d-flex" @submit.prevent="getSearchProducts(search)" role="search">
+                    <input v-model="search" class="form-control me-2" type="search" placeholder="Search"
+                        aria-label="Search" />
                 </form>
                 <button @click="modalOpen" class="btn btn-primary">Add Product</button>
             </div>
@@ -126,12 +143,8 @@ function modalClose() {
                     :stock="product.stock" @delete="getProducts" @edit="getProducts" />
             </div>
             <!--===========Pagination============-->
-            <Pagination 
-            :total-pages="totalPages" 
-            :total-elements="totalElements" 
-            @page="async (n)=> await getProducts(n)" 
-            
-            />
+            <Pagination :total-pages="totalPages" :total-elements="totalElements"
+                @page="async (n) => await getProducts(n)" />
         </div>
         <!--=================MODAl===========================-->
         <div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="addProduct" aria-hidden="true">
