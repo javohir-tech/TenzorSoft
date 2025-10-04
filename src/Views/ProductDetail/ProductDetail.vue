@@ -10,6 +10,8 @@ import { useRouter } from 'vue-router';
 import dayjs from 'dayjs';
 //HOOKS
 import useApiActionsProducts from '../../Hooks/useApiActionsProducts';
+//Components
+import FormControl from '../../components/Inputs/FormControl.vue'
 
 const route = useRoute();
 const router = useRouter();
@@ -25,7 +27,7 @@ const productStock = ref(0);
 const productCategory = ref('');
 const productActive = ref(false)
 
-const { deleteProduct } = useApiActionsProducts()
+const { deleteProduct, putProduct, loading : loadingActions } = useApiActionsProducts()
 
 const getProductDetails = async () => {
     loading.value = true
@@ -34,6 +36,11 @@ const getProductDetails = async () => {
         // console.log(res);
         data.value = res.data.data;
         date.value = dayjs(res.data.createdAt).format('DD.MM.YYYY');
+        productName.value = data.value.name;
+        productPrice.value = data.value.price;
+        productStock.value = data.value.stock;
+        productCategory.value = data.value.category
+        productActive.value = data.value.isActive
         console.log(data.value);
     } catch (error) {
         console.log(error)
@@ -51,16 +58,15 @@ const deleteProducts = async () => {
     }
 }
 
-const putProduct = async () => {
+const editProduct = async () => {
     try {
-        const res = await axios.put(`${import.meta.env.VITE_API_URL}/products/${route.params.id}`, {
+        await putProduct(route.params.id, {
             name: productName.value,
             price: productPrice.value,
             stock: productStock.value,
             category: productCategory.value,
             isActive: productActive.value
         })
-        console.log(res)
     } catch (error) {
         console.log(error)
     }
@@ -131,14 +137,48 @@ onMounted(() => {
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form>
-                                            
+                                        <form @submit.prevent="editProduct">
+                                            <div class="mb-3">
+                                                <label for="name" class="form-label">Nomi</label>
+                                                <FormControl v-model="productName" :placeholder="'name'" :type="'text'"
+                                                    :id="'name'" :model-value="productName"
+                                                    :validator="(val) => val.length >= 3" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="price" class="form-label">Narxi</label>
+                                                <FormControl v-model="productPrice" :placeholder="'price'"
+                                                    :type="'number'" :id="'price'" :model-value="productPrice"
+                                                    :validator="(val) => val >= 0" :invalid="'Eng kami 0 '" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="stock" class="form-label">Soni</label>
+                                                <FormControl v-model="productStock" :placeholder="'stock'"
+                                                    :type="'number'" :id="'stock'" :model-value="productStock"
+                                                    :validator="(val) => val >= 0" :invalid="'enng  kami  0'" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="category" class="form-label">Kategorysi</label>
+                                                <FormControl v-model="productCategory" :placeholder="'kategoty'"
+                                                    :id="'category'" :model-value="productCategory"
+                                                    :validator="(val) => val.length >= 3" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input v-model="productActive" class="form-check-input"
+                                                        type="checkbox" role="switch" id="switchCheckDefault">
+                                                    <label class="form-check-label"
+                                                        for="switchCheckDefault">Active</label>
+                                                </div>
+                                            </div>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-warning" @click="editProduct"
+                                            :disabled="loadingActions">
+                                            {{ loadingActions ? 'loading...' : 'edit' }}
+                                        </button>
                                     </div>
                                 </div>
                             </div>

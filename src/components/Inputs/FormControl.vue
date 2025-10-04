@@ -8,7 +8,7 @@ const props = defineProps({
     id: String,
     modelValue: String,
     validator: Function,
-    invalid: String
+    invalid: {type: String, default : 'Maydonni to\'ldiring'}
 })
 
 const emit = defineEmits(["update:modelValue"]);

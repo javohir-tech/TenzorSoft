@@ -27,10 +27,10 @@ onMounted(() => {
     getProducts()
 })
 
-watch(deleteAction, () => {
-    getProducts();
-    deleteAction.value= false
-})
+// watch(deleteAction, () => {
+//     getProducts();
+//     deleteAction.value= false
+// })
 
 
 </script>
