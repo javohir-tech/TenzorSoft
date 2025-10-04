@@ -2,7 +2,7 @@
 //AXIOS
 import axios from 'axios';
 //VUE
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 //VUE Router
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
@@ -12,6 +12,9 @@ import dayjs from 'dayjs';
 import useApiActionsProducts from '../../Hooks/useApiActionsProducts';
 //Components
 import FormControl from '../../components/Inputs/FormControl.vue'
+//Bootstrap
+import * as bootstrap from 'bootstrap'
+
 
 const route = useRoute();
 const router = useRouter();
@@ -19,6 +22,7 @@ const router = useRouter();
 const data = ref(null);
 const loading = ref(false);
 const date = ref(null);
+let modalInstance = null;
 
 //PUT actions
 const productName = ref('');
@@ -27,7 +31,7 @@ const productStock = ref(0);
 const productCategory = ref('');
 const productActive = ref(false)
 
-const { deleteProduct, putProduct, loading : loadingActions } = useApiActionsProducts()
+const { deleteProduct, putProduct, loading: loadingActions } = useApiActionsProducts()
 
 const getProductDetails = async () => {
     loading.value = true
@@ -65,17 +69,43 @@ const editProduct = async () => {
             price: productPrice.value,
             stock: productStock.value,
             category: productCategory.value,
-            isActive: productActive.value
+            isActive: productActive.value,
         })
+        modalClose()
+        await getProductDetails()
     } catch (error) {
         console.log(error)
     }
 }
 
-onMounted(() => {
-    getProductDetails();
+onMounted(async () => {
+    await getProductDetails();
+    await nextTick()
+    const modalEl = document.getElementById('putAction');
+    if (modalEl) {
+        modalInstance = new bootstrap.Modal(modalEl)
+        modalEl.addEventListener('hidden.bs.modal', () => {
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) backdrop.remove();
+        });
+    } else {
+        console.log("modal element topilmadi ")
+    }
 })
 
+
+function modalOpen() {
+    modalInstance.show();
+}
+
+function modalClose() {
+    if (modalInstance) {
+        document.activeElement?.blur()
+        modalInstance.hide()
+    } else {
+        console.log('modal hali mavjud emas ')
+    }
+}
 
 </script>
 
@@ -123,8 +153,7 @@ onMounted(() => {
                         <p class="mb-0"><i class="bi bi-heart"></i></p>
                     </div>
                     <div class="d-flex flex-column flex-md-row gap-2 mt-2">
-                        <button data-bs-toggle="modal" data-bs-target="#putAction"
-                            class="btn btn-warning flex-fill">Put</button>
+                        <button @click="modalOpen" class="btn btn-warning flex-fill">Put</button>
                         <button class="btn btn-danger flex-fill">Delete</button>
                         <!--============MODAL=============-->
                         <div class="modal fade" id="putAction" tabindex="-1" aria-labelledby="putAction"

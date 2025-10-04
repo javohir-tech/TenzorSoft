@@ -6,7 +6,7 @@ const props = defineProps({
     placeholder: String,
     type: { type: String, default: 'text' },
     id: String,
-    modelValue: String,
+    modelValue: [String , Number],
     validator: Function,
     invalid: {type: String, default : 'Maydonni to\'ldiring'}
 })
