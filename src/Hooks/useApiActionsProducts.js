@@ -12,10 +12,10 @@ export default function useApiActionsProducts() {
         loading.value = true
         try {
             const res = await axios.delete(`${import.meta.env.VITE_API_URL}/products/${id}`)
-            console.log(res)
+            // console.log(res)
             toast.success(res.data.message);
         } catch (error) {
-            console.log(error)
+            toast.error(error.message)
         } finally {
             loading.value = false
         }
@@ -25,10 +25,25 @@ export default function useApiActionsProducts() {
         loading.value = true
         try {
             const res = await axios.put(`${import.meta.env.VITE_API_URL}/products/${id}`, data)
-            console.log(res)
+            // console.log(res)
             toast.success(res.data.message)
         } catch (error) {
-            console.log(error)
+            // console.log(error)
+            toast.error(error.message)
+        } finally {
+            loading.value = false
+        }
+    }
+
+    const addProduct = async (data) => {
+        loading.value = true
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/products` , data)
+            console.log(res);
+            toast.success(res.data.message)
+        } catch (error) {
+            // console.log(error)
+            toast.error(error.message)
         }finally{
             loading.value = false
         }
@@ -36,6 +51,7 @@ export default function useApiActionsProducts() {
 
     return {
         deleteProduct,
+        addProduct,
         putProduct,
         loading
     }

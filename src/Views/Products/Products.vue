@@ -2,12 +2,26 @@
 //Axios
 import axios from 'axios';
 //Components
-import { Product } from '../../components';
+import { FormControl, Product } from '../../components';
 //VUE
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
+//HOOKS
+import useApiActionsProducts from '../../Hooks/useApiActionsProducts'
+//Bootstrap
+import Modal from 'bootstrap/js/dist/modal';
+
+const { addProduct, loading: loadingAdd } = useApiActionsProducts()
 
 const content = ref([]);
 const loading = ref(false);
+//Product item 
+const productName = ref('');
+const productPrice = ref(0);
+const productStock = ref(0);
+const productCategory = ref('');
+const productActive = ref(true);
+//DOM
+let modalInstance = null;
 
 const getProducts = async () => {
     loading.value = true
@@ -22,9 +36,50 @@ const getProducts = async () => {
     }
 }
 
-onMounted(()=>{
-    getProducts()
+const addProducts = async () => {
+    try {
+        await addProduct({
+            name: productName.value,
+            price: productPrice.value,
+            stock: productStock.value,
+            category: productCategory.value,
+            isActive: productActive.value,
+        })
+        productName.value = "";
+        productPrice.value = 0;
+        productStock.value =  0;
+        productCategory.value ='',
+        modalClose()
+        console.log("tayyor")
+        getProducts()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+onMounted(async () => {
+    await getProducts()
+    await nextTick();
+
+    const modalEl = document.getElementById('addProduct');
+
+    if (modalEl) {
+        modalInstance = new Modal(modalEl);
+        modalEl.addEventListener('hide.bs.modal', () => {
+            document.activeElement?.blur()
+        })
+    }else{
+        console.log(`Modal elemant topilmadi`)
+    }
 })
+
+function modalOpen(){
+    modalInstance.show()
+}
+
+function modalClose(){
+    modalInstance.hide()
+}
 
 </script>
 
@@ -52,8 +107,11 @@ onMounted(()=>{
         </div>
         <!-- CONTENT -->
         <div v-else>
-            <div>
-
+            <div class="justify-content-end d-flex mt-3">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                </form>
+                <button @click="modalOpen" class="btn btn-primary">Add Product</button>
             </div>
             <div class="row my-3">
                 <Product v-for="product in content" :key="product.id" :is-active="product.isActive"
@@ -61,8 +119,57 @@ onMounted(()=>{
                     :stock="product.stock" @delete="getProducts" @edit="getProducts" />
             </div>
         </div>
-
-
+        <!--=================MODAl===========================-->
+        <div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="addProduct" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" @click="modalClose"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form @submit.prevent="addProduct">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nomi</label>
+                                <FormControl v-model="productName" :placeholder="'name'" :type="'text'" :id="'name'"
+                                    :model-value="productName" :validator="(val) => val.length >= 3" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Narxi</label>
+                                <FormControl v-model="productPrice" :placeholder="'price'" :type="'number'"
+                                    :id="'price'" :model-value="productPrice" :validator="(val) => val >= 0"
+                                    :invalid="'Eng kami 0 '" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="stock" class="form-label">Soni</label>
+                                <FormControl v-model="productStock" :placeholder="'stock'" :type="'number'"
+                                    :id="'stock'" :model-value="productStock" :validator="(val) => val >= 0"
+                                    :invalid="'enng  kami  0'" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Kategorysi</label>
+                                <FormControl v-model="productCategory" :placeholder="'kategoty'" :id="'category'"
+                                    :model-value="productCategory" :validator="(val) => val.length >= 3" />
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input v-model="productActive" class="form-check-input" type="checkbox"
+                                        role="switch" id="switchCheckDefault">
+                                    <label class="form-check-label" for="switchCheckDefault">Active</label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="modalClose">Close</button>
+                        <button @click="addProducts" type="button" class="btn btn-primary" :disabled="loadingAdd">
+                           {{ loadingAdd ? 'Loading...' :  'Add Product'}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--=================/MODAl===========================-->
     </div>
 </template>
 

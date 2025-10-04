@@ -31,14 +31,14 @@ const productActive = ref(props.isActive)
 
 const emit = defineEmits(['delete', 'edit'])
 
-// const deleteProducts = async (id) => {
-//     try {
-//         await deleteProduct(id)
-//         emit('delete')
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+const deleteProducts = async (id) => {
+    try {
+        await deleteProduct(id)
+        emit('delete')
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 const editProduct = async (id) => {
     try {
@@ -58,13 +58,18 @@ const editProduct = async (id) => {
 onMounted(async () => {
     await nextTick();
 
-    const modalEl = document.getElementById('putAction');
+    const modalEl = document.getElementById(`putAction-${props.id}`);
 
     if (modalEl) {
         modalinstance = new Modal(modalEl);
 
         modalEl.addEventListener('hide.bs.modal', () => {
             document.activeElement?.blur();
+        })
+        modalEl.addEventListener('hidden.bs.modal', () => {
+            const backdrop = document.querySelector('.modal-backdrop')
+            if (backdrop) backdrop.remove()
+            document.body.style.removeProperty('overflow')
         })
     }
 })
@@ -73,7 +78,7 @@ function modalClose() {
     modalinstance.hide()
 }
 
-function modalOpen(){
+function modalOpen() {
     modalinstance.show()
 }
 
@@ -98,15 +103,15 @@ function modalOpen(){
                     <span><i class="bi bi-heart"></i></span>
                 </div>
                 <div class="text-end">
-                    <button @click="modalOpen"
-                        class="btn btn-warning me-2 position-relative z-3"><i class="bi bi-pencil-square"></i></button>
+                    <button @click="modalOpen" class="btn btn-warning me-2 position-relative z-3"><i
+                            class="bi bi-pencil-square"></i></button>
                     <button @click="deleteProducts(props.id)" class="btn btn-danger position-relative z-3"><i
                             class="bi bi-trash"></i></button>
                 </div>
             </div>
         </div>
         <!--============MODAL=============-->
-        <div class="modal fade" id="putAction" tabindex="-1" aria-labelledby="putAction" aria-hidden="true">
+        <div class="modal fade" :id="`putAction-${props.id}`" tabindex="-1" aria-labelledby="putAction" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
