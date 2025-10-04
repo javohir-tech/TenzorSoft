@@ -5,7 +5,6 @@ import { ref } from "vue";
 import { toast } from "vue3-toastify";
 
 const loading = ref(false)
-const success = ref(false)
 
 export default function useApiActionsProducts() {
 
@@ -14,7 +13,6 @@ export default function useApiActionsProducts() {
         try {
             const res = await axios.delete(`${import.meta.env.VITE_API_URL}/products/${id}`)
             // console.log(res)
-            
             toast.success(res.data.message);
         } catch (error) {
             toast.error(error.message)

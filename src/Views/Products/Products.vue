@@ -2,7 +2,7 @@
 //Axios
 import axios from 'axios';
 //Components
-import { FormControl, Product } from '../../components';
+import { FormControl, Pagination, Product } from '../../components';
 //VUE
 import { nextTick, onMounted, ref } from 'vue';
 //HOOKS
@@ -22,12 +22,19 @@ const productCategory = ref('');
 const productActive = ref(true);
 //DOM
 let modalInstance = null;
+//Pagination
+const totalElements = ref(0);
+const totalPages = ref(0);
 
-const getProducts = async () => {
+const page = 0;
+
+const getProducts = async (page = 0) => {
     loading.value = true
     try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/products?page=${page}`);
         // console.log(res)
+        totalElements.value = res.data.data.totalElements
+        totalPages.value = res.data.data.totalPages
         content.value = res.data.data.content
     } catch (error) {
         console.log(error.message)
@@ -47,9 +54,9 @@ const addProducts = async () => {
         })
         productName.value = "";
         productPrice.value = 0;
-        productStock.value =  0;
-        productCategory.value ='',
-        modalClose()
+        productStock.value = 0;
+        productCategory.value = '',
+            modalClose()
         console.log("tayyor")
         getProducts()
     } catch (error) {
@@ -68,16 +75,16 @@ onMounted(async () => {
         modalEl.addEventListener('hide.bs.modal', () => {
             document.activeElement?.blur()
         })
-    }else{
+    } else {
         console.log(`Modal elemant topilmadi`)
     }
 })
 
-function modalOpen(){
+function modalOpen() {
     modalInstance.show()
 }
 
-function modalClose(){
+function modalClose() {
     modalInstance.hide()
 }
 
@@ -118,6 +125,13 @@ function modalClose(){
                     :category="product.category" :id="product.id" :name="product.name" :price="product.price"
                     :stock="product.stock" @delete="getProducts" @edit="getProducts" />
             </div>
+            <!--===========Pagination============-->
+            <Pagination 
+            :total-pages="totalPages" 
+            :total-elements="totalElements" 
+            @page="async (n)=> await getProducts(n)" 
+            
+            />
         </div>
         <!--=================MODAl===========================-->
         <div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="addProduct" aria-hidden="true">
@@ -128,7 +142,7 @@ function modalClose(){
                         <button type="button" class="btn-close" @click="modalClose"></button>
                     </div>
                     <div class="modal-body">
-                        <form @submit.prevent="addProduct">
+                        <form @submit.prevent="addProducts">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nomi</label>
                                 <FormControl v-model="productName" :placeholder="'name'" :type="'text'" :id="'name'"
@@ -163,7 +177,7 @@ function modalClose(){
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="modalClose">Close</button>
                         <button @click="addProducts" type="button" class="btn btn-primary" :disabled="loadingAdd">
-                           {{ loadingAdd ? 'Loading...' :  'Add Product'}}
+                            {{ loadingAdd ? 'Loading...' : 'Add Product' }}
                         </button>
                     </div>
                 </div>
