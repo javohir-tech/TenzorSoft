@@ -21,6 +21,9 @@
                             <RouterLink class="nav-link" to="/products">Products</RouterLink>
                         </li>
                     </ul>
+                    <div>
+                        Profile
+                    </div>
                 </div>
             </div>
         </nav>
