@@ -1,4 +1,30 @@
 <script setup>
+//VUE
+import { onMounted, ref } from 'vue';
+//HOOKS
+import { useAuth } from '../../Hooks/useAuth';
+//DICEBEAR
+import { createAvatar } from '@dicebear/core';
+import { initials } from '@dicebear/collection';
+
+const profilAvatar = ref(null);
+
+const getAvatar = () => {
+    const userName = localStorage.getItem('username');
+    if (userName) {
+        const avatar = createAvatar(initials, {
+            "seed": userName
+        });
+
+        profilAvatar.value = avatar.toDataUri();
+    }
+}
+
+onMounted(() => {
+    getAvatar()
+});
+
+const { logOut } = useAuth()
 
 </script>
 
@@ -21,8 +47,14 @@
                             <RouterLink class="nav-link" to="/products">Products</RouterLink>
                         </li>
                     </ul>
-                    <div>
-                        Profile
+                    <div class="dropdown">
+                        <img v-if="profilAvatar" :src="profilAvatar" alt="profilImage" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><span class="dropdown-item" @click="logOut">logOut</span></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -31,10 +63,19 @@
 </template>
 
 <style scoped>
-.navbar-nav{
-    a{
+.navbar-nav {
+    a {
         font-weight: 500;
         font-size: 16px;
+    }
+}
+
+.dropdown { 
+    width: 100px;
+    img{
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
     }
 }
 </style>
