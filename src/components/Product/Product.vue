@@ -26,7 +26,7 @@ const props = defineProps({
 //DOM
 let modalinstance = null;
 
-const emit = defineEmits(['delete', 'edit', 'addStore'])
+const emit = defineEmits(['delete', 'edit', 'addStore',])
 //PUT actions
 const productName = ref(props.name)
 const productPrice = ref(props.price);
@@ -63,7 +63,12 @@ const editProduct = async (id) => {
 }
 
 const handleAdd = () => {
-    emit('addStore');
+    // console.log(added.value)
+    if(added.value){
+        emit('addStore', false)
+    }else{
+        emit('addStore' , true)
+    }
     added.value = addProductStore.orderProducts.some(order => order.id === props.id)
 }
 
@@ -112,7 +117,7 @@ function modalOpen() {
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <p class="mb-0">{{ props.stock }} ta qolgan </p>
-                    <span @click="handleAdd"  class="position-relative z-3" :class="added ? 'text-danger' : ''"><i
+                    <span @click="handleAdd" class="position-relative z-3" :class="added ? 'text-danger' : ''"><i
                             class="bi bi-heart"></i></span>
                 </div>
                 <div class="text-end">

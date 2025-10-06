@@ -82,15 +82,16 @@ const addProducts = async () => {
     }
 }
 
-const handleAdd = (product) => {
-    const added = addProductStore.orders.some(order => order.id === product.id);
-    if (!added) {
-        addProductStore.addProduct(product)
+const handleAdd = (added, product) => {
+    if (added) {
+        addProductStore.addProduct(product);
         toast.success('Product storega qo\'ildi')
     }else{
-        toast.info('Bu product storega qo\'shilgan')
+        addProductStore.deleteProduct(product.id)
+        toast.warning('olindi')
     }
 }
+
 
 onMounted(async () => {
     await getProducts()
@@ -163,7 +164,8 @@ function modalClose() {
             <div class="row my-3">
                 <Product v-for="product in content" :key="product.id" :is-active="product.isActive"
                     :category="product.category" :id="product.id" :name="product.name" :price="product.price"
-                    :stock="product.stock" @delete="getProducts" @edit="getProducts" @addStore="handleAdd(product)" />
+                    :stock="product.stock" @delete="getProducts" @edit="getProducts"
+                    @addStore="(added) => handleAdd(added, product)" />
             </div>
             <!--===========Pagination============-->
             <Pagination :total-pages="totalPages" :total-elements="totalElements"
