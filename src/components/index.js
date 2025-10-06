@@ -3,6 +3,7 @@ import FormControl from "./Inputs/FormControl.vue"
 import Product from "./Product/Product.vue";
 import Footer from "./Footer/Footer.vue"
 import Pagination from "./Pagination/Pagination.vue";
+import orderProduct from "./OrderProduct/orderProduct.vue";
 
 
 export {
@@ -10,5 +11,6 @@ export {
     FormControl,
     Product,
     Footer,
-    Pagination
+    Pagination,
+    orderProduct
 }

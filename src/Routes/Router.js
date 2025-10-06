@@ -3,7 +3,7 @@ import { createWebHistory, createRouter } from "vue-router";
 //Main Layout
 import MainLayout from "../Layout/MainLayout.vue";
 //Views
-import { Home, ProductDetails, Products } from "../Views";
+import { Home, Orders, ProductDetails, Products } from "../Views";
 //Auth
 import { Login, Register } from "../Auth";
 
@@ -23,6 +23,10 @@ const routes = [
             {
                 path: 'productDetail/:id',
                 component : ProductDetails
+            },
+            {
+                path : 'orders',
+                component : Orders
             }
         ]
     },

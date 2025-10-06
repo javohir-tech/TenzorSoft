@@ -64,10 +64,10 @@ const editProduct = async (id) => {
 
 const handleAdd = () => {
     // console.log(added.value)
-    if(added.value){
+    if (added.value) {
         emit('addStore', false)
-    }else{
-        emit('addStore' , true)
+    } else {
+        emit('addStore', true)
     }
     added.value = addProductStore.orderProducts.some(order => order.id === props.id)
 }
@@ -107,8 +107,10 @@ function modalOpen() {
         <div class="product position-relative">
             <RouterLink :to="`/productDetail/${props.id}`"
                 class="position-absolute top-0 start-0 bg-primary w-100 h-100 rounded z-2"></RouterLink>
-            <div class="product-img d-flex justify-content-center align-items-center bg-secondary rounded-top">
-                <i class="bi bi-card-image text-light"></i>
+            <div class="product-image" aria-hidden="true">
+                <h5 class="card-title placeholder-glow">
+                    <span class="placeholder col-6 rounded-top"></span>
+                </h5>
             </div>
             <div class="product-info px-3 py-2 rounded-bottom">
                 <div class="d-flex justify-content-between">
@@ -192,17 +194,15 @@ function modalOpen() {
         opacity: 0;
     }
 
-    a:hover {
+    i:hover {
         cursor: pointer;
     }
 }
 
-.product-img {
-    height: 100px;
-
-    i {
-        font-size: 32px;
-        transition: all 0.8ms ease-in;
+.product-image {
+    span{
+        height: 120px;
+        width: 100%;
     }
 }
 

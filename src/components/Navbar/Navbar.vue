@@ -6,6 +6,10 @@ import { useAuth } from '../../Hooks/useAuth';
 //DICEBEAR
 import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
+//Store
+import { productsStore } from '../../Stores/ProductStore';
+
+const orderProducts = productsStore()
 
 const profilAvatar = ref(null);
 
@@ -51,8 +55,15 @@ const { logOut } = useAuth()
                         <img v-if="profilAvatar" :src="profilAvatar" alt="profilImage" type="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
                             <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li class="position-relative">
+                                <RouterLink class="dropdown-item" to="/orders">Orders</RouterLink>
+                                <span v-if="orderProducts.orders.length > 0"
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ orderProducts.orders.length }}
+                                    <span class="visually-hidden">unread messages</span>
+                                </span>
+                            </li>
                             <li><span class="dropdown-item" @click="logOut">logOut</span></li>
                         </ul>
                     </div>
@@ -70,9 +81,10 @@ const { logOut } = useAuth()
     }
 }
 
-.dropdown { 
+.dropdown {
     width: 100px;
-    img{
+
+    img {
         height: 40px;
         width: 40px;
         border-radius: 50%;
