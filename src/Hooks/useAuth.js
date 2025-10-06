@@ -41,7 +41,7 @@ export function useAuth() {
         loading.value = true;
         try {
             const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, credentials);
-            // console.log(res);
+            console.log(res);
             toast.success(res.data.message)
             userName.value = res.data.data.username;
             token.value = res.data.data.token;
