@@ -7,6 +7,10 @@ import useApiActionsProducts from '../../Hooks/useApiActionsProducts';
 import { FormControl } from '..';
 //Bootstrap
 import Modal from 'bootstrap/js/dist/modal';
+//Store
+import { productsStore } from '../../Stores/ProductStore';
+
+const addProductStore = productsStore()
 
 const { deleteProduct, putProduct, loading } = useApiActionsProducts()
 //Props
@@ -22,14 +26,16 @@ const props = defineProps({
 //DOM
 let modalinstance = null;
 
+const emit = defineEmits(['delete', 'edit', 'addStore'])
 //PUT actions
 const productName = ref(props.name)
 const productPrice = ref(props.price);
 const productStock = ref(props.stock);
 const productCategory = ref(props.category);
-const productActive = ref(props.isActive)
+const productActive = ref(props.isActive);
+//Store
+const added = ref(false);
 
-const emit = defineEmits(['delete', 'edit'])
 
 const deleteProducts = async (id) => {
     try {
@@ -55,6 +61,12 @@ const editProduct = async (id) => {
         console.log(error)
     }
 }
+
+const handleAdd = () => {
+    emit('addStore');
+    added.value = addProductStore.orderProducts.some(order => order.id === props.id)
+}
+
 onMounted(async () => {
     await nextTick();
 
@@ -100,7 +112,8 @@ function modalOpen() {
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <p class="mb-0">{{ props.stock }} ta qolgan </p>
-                    <span><i class="bi bi-heart"></i></span>
+                    <span @click="handleAdd"  class="position-relative z-3" :class="added ? 'text-danger' : ''"><i
+                            class="bi bi-heart"></i></span>
                 </div>
                 <div class="text-end">
                     <button @click="modalOpen" class="btn btn-warning me-2 position-relative z-3"><i
@@ -111,7 +124,8 @@ function modalOpen() {
             </div>
         </div>
         <!--============MODAL=============-->
-        <div class="modal fade" :id="`putAction-${props.id}`" tabindex="-1" aria-labelledby="putAction" aria-hidden="true">
+        <div class="modal fade" :id="`putAction-${props.id}`" tabindex="-1" aria-labelledby="putAction"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

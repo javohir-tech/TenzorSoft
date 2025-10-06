@@ -9,12 +9,16 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 //Toastfy
 import Vue3Toastify, {toast} from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+//Pinia
+import { createPinia } from 'pinia';
 
 const app = createApp(App)
+const pinia = createPinia()
 
 app.use(Vue3Toastify, {
     position: 'top-right',
     autoClose : 3000
 })
+app.use(pinia)
 app.use(router)
 app.mount('#app')

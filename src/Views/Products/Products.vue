@@ -4,13 +4,19 @@ import axios from 'axios';
 //Components
 import { FormControl, Pagination, Product } from '../../components';
 //VUE
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch, toRaw } from 'vue';
 //HOOKS
 import useApiActionsProducts from '../../Hooks/useApiActionsProducts'
 //Bootstrap
 import Modal from 'bootstrap/js/dist/modal';
+//Store
+import { productsStore } from '../../Stores/ProductStore';
+//Toast
+import { toast } from 'vue3-toastify';
 
 const { addProduct, loading: loadingAdd } = useApiActionsProducts()
+
+const addProductStore = productsStore();
 
 const content = ref([]);
 const loading = ref(false);
@@ -73,6 +79,16 @@ const addProducts = async () => {
         getProducts()
     } catch (error) {
         console.log(error)
+    }
+}
+
+const handleAdd = (product) => {
+    const added = addProductStore.orders.some(order => order.id === product.id);
+    if (!added) {
+        addProductStore.addProduct(product)
+        toast.success('Product storega qo\'ildi')
+    }else{
+        toast.info('Bu product storega qo\'shilgan')
     }
 }
 
@@ -147,7 +163,7 @@ function modalClose() {
             <div class="row my-3">
                 <Product v-for="product in content" :key="product.id" :is-active="product.isActive"
                     :category="product.category" :id="product.id" :name="product.name" :price="product.price"
-                    :stock="product.stock" @delete="getProducts" @edit="getProducts" />
+                    :stock="product.stock" @delete="getProducts" @edit="getProducts" @addStore="handleAdd(product)" />
             </div>
             <!--===========Pagination============-->
             <Pagination :total-pages="totalPages" :total-elements="totalElements"
