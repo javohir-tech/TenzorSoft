@@ -22,11 +22,11 @@ const routes = [
             },
             {
                 path: 'productDetail/:id',
-                component : ProductDetails
+                component: ProductDetails
             },
             {
-                path : 'orders',
-                component : Orders
+                path: 'orders',
+                component: Orders
             }
         ]
     },
@@ -55,7 +55,7 @@ router.beforeEach((to, form, next) => {
         next("/")
     }
 
-    if(!token  && !maqullangan.includes(to.path)){
+    if (!token && !maqullangan.includes(to.path)) {
         next('/login')
     }
 

@@ -7,7 +7,11 @@ import { Footer, Navbar } from '../components';
 <template>
     <Navbar />
     <main>
-        <router-view />
+        <router-view v-slot="{ Component }">
+            <KeepAlive :include="['Home' , 'Products']" :exclude="[]">
+                <component :is="Component" />
+            </KeepAlive>
+        </router-view>
     </main>
-    <Footer/>
+    <Footer />
 </template>
