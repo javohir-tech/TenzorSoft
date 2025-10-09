@@ -10,6 +10,7 @@ import { Footer, Navbar } from '../components';
         <router-view v-slot="{ Component }">
             <KeepAlive :include="['Home' , 'Products']" :exclude="[]">
                 <component :is="Component" />
+                
             </KeepAlive>
         </router-view>
     </main>
